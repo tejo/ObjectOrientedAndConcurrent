@@ -14,7 +14,7 @@ func sleepAndTalk(t time.Duration, msg string) {
 
 func main() {
 	sleepAndTalk(0*time.Second, "Hello")
-	sleepAndTalk(1*time.Second, "Gophers!")
+	sleepAndTalk(1*time.Second, "Gilders!")
 	sleepAndTalk(2*time.Second, "What's")
 	sleepAndTalk(3*time.Second, "up?")
 }

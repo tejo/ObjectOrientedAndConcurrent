@@ -16,7 +16,7 @@ func main() {
 	c := make(chan string)
 
 	go sleepAndTalk(0, "Hello", c)
-	go sleepAndTalk(1, "Gophers!", c)
+	go sleepAndTalk(1, "Gilders!", c)
 	go sleepAndTalk(2, "What's", c)
 	go sleepAndTalk(3, "up?", c)
 

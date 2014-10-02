@@ -1,16 +1,5 @@
-Go: object oriented and concurrent
+Go
 Just not the usual way
-
-Francesc Campoy
-Developer Advocate for Go and the Cloud
-@francesc
-campoy@golang.org
-
-* Recording
-
-A recording of this talk is available on YouTube
-
-.link http://youtu.be/Ng8m5VXsn8Q
 
 * What is Go?
 
@@ -32,9 +21,12 @@ Others:
 
 - dotCloud (Docker)
 - SoundCloud
+- DropBox
+- Stripe
 - Canonical
 - CloudFlare
 - Mozilla
+- Splice
 - ...
 
 [[http://golang.org/wiki/GoUsers][golang.org/wiki/GoUsers]]
@@ -43,31 +35,20 @@ Others:
 
 .image img/trends.png _ 800
 
-.caption Google Trends for [[http://www.google.com/trends/explore#q=golang][golang]]
+* Why I like go
+
+- strong concurrency support
+- fast (really!)
+- compiled (zero dependency deploy)
+- strongly typed with dynamic taste
+  (you see a method, you get what goes in and what goes out, easy refactoring)
+- explicit error handling
+  (if you have an error, you’ve got to do something with it)
+- Promotes developer discipline 
+  (in ruby you have to work hard to keep developer discipline, go really enforce developer discipline, it makes harder to be lazy)
+- only 25 keywords
 
 * Let's dive in
-
-* Go is
-
-Go is
-
-- statically typed,
-
-- part of the C family,
-
-- garbage collected,
-
-- statically compiled,
-
-- object oriented,
-
-- concurrency friendly.
-
-And today I will speak about the last two points.
-
-* Object orientation in Go
-
-* Object oriented flavors
 
 Go is Object Oriented, but doesn't have the keywords:
 
@@ -139,7 +120,6 @@ Go interfaces are satisfied *implicitly*.
 
 .image //upload.wikimedia.org/wikipedia/commons/thumb/2/29/Rolling_Stones_09.jpg/512px-Rolling_Stones_09.jpg _ 512
 
-.caption Picture by Gorupdebesanez [[http://creativecommons.org/licenses/by-sa/3.0][CC-BY-SA-3.0]], via [[http://commons.wikimedia.org/wiki/File%3ARolling_Stones_09.jpg][Wikimedia Commons]]
 
 * Go: implicit satisfaction
 
@@ -163,45 +143,6 @@ It doesn't just sound like a duck, it *is* a duck.
 
 .image img/duck.jpg 400 400
 
-* FuncDraw: an example on interfaces
-
-.image img/funcdraw.png 500 700
-
-* FuncDraw: package parser
-
-Package `parse` provides a parser of strings into functions.
-
-	func Parse(text string) (*Func, error) { ... }
-
-`Func` is a struct type, with an `Eval` method.
-
-	type Func struct { ... }
-
-	func (p *Func) Eval(x float64) float64 { ... }
-
-* FuncDraw: package draw
-
-Package draw generates images given a function.
-
-	func Draw(f *parser.Func) image.Image {
-		for x := start; x < end; x += inc {
-			y := f.Eval(x)
-			...
-		}
-	}
-
-`draw` depends on `parser`
-
-- makes testing hard
-
-Let's use an interface instead
-
-	type Evaluable interface {
-		Eval(float64) float64
-	}
-
-	func Draw(f Evaluable) image.Image { ... }
-
 * Inheritance vs composition
 
 * Inheritance vs composition
@@ -214,17 +155,17 @@ Lets see why.
 
 * Runner
 
-.code src/BadInheritance.java /START_RUNNER/,/END_RUNNER/
+.code src/bad_inheritance.rb /START_RUNNER/,/END_RUNNER/
 
 * RunCounter is a Runner that counts
 
-.code src/BadInheritance.java /START_COUNTING/,/END_COUNTING/
+.code src/bad_inheritance.rb /START_COUNTING/,/END_COUNTING/
 
 * Let's run and count
 
 What will this code print?
 
-.code src/BadInheritance.java /START_MAIN/,/END_MAIN/
+.code src/bad_inheritance.rb /START_MAIN/,/END_MAIN/
 
 Of course, this prints:
 
@@ -247,15 +188,10 @@ Inheritance causes:
 
 * Solution: use composition
 
-.code src/Composition.java /START_COUNTING/,/BREAK_COUNTING/
+.code src/composition.rb /START_COUNTING/,/END_COUNTING/
 
-* Solution: use composition (continued)
 
-.code src/Composition.java /BREAK_COUNTING/,/END_COUNTING/
-
-* Solution: use composition (continued)
-
-*Pros*
+* Pros 
 
 - The bug is gone!
 - `Runner` is completely independent of `RunCounter`.
@@ -263,9 +199,11 @@ Inheritance causes:
 
 *Cons*
 
-- We need to explicitly define the `Runner` methods on `RunCounter`:
+- We need to explicitly define the `runner` methods on `RunCounter`:
 
-	public String getName() { return runner.getName(); }
+  def name
+    runner.name
+  end
 
 - This can cause lots of repetition, and eventually bugs.
 
@@ -279,7 +217,7 @@ Let's use composition directly:
 
 .code src/runner/runner.go /type Runner/,/END_RUNNER/
 
-All very similar to the Java version.
+All very similar to the Ruby version.
 
 * RunCounter
 
@@ -289,7 +227,7 @@ All very similar to the Java version.
 
 * Composition in Go
 
-Same pros and cons as the composition version in Java.
+Same pros and cons as the composition version in Ruby.
 
 We also have the boilerplate to proxy methods from `Runner`.
 
@@ -499,7 +437,7 @@ We need a goroutine sending ids into the channel.
 .play src/battle.go /battle/,/^}/
 
 Go - [[http://localhost:8080/fight?usr=go]]
-Java - [[http://localhost:8080/fight?usr=java]]
+Ruby - [[http://localhost:8080/fight?usr=ruby]]
 
 * Chain of gophers
 
